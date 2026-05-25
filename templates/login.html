@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Login - IoT Production System{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="card">
+        <div class="card-header" style="text-align: center;">
+            <div class="icon">🔐</div>
+            <h2>Login to Predictive Maintenance 
+                System</h2>
+        </div>
+        <form method="POST">
+            <div class="form-group">
+                <label for="email">📧 Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">🔑 Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">
+            Don't have an account? <a href="{{ url_for('signup') }}" style="color: #4169E1; font-weight: bold;">Sign Up</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

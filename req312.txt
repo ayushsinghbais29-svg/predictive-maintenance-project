@@ -1,0 +1,13 @@
+joblib==1.4.2
+matplotlib==3.10.3
+ngboost==0.5.6
+nltk==3.8.1
+pandas==2.3.1
+scikit_learn
+scipy==1.16.1
+seaborn==0.13.2
+tensorflow==2.17.0
+tensorflow_intel==2.17.0
+torch==2.5.1
+transformers==4.47.0
+wordcloud==1.9.4

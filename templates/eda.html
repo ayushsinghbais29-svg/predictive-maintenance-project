@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}EDA - IoT Production System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">📊 Exploratory Data Analysis</div>
+    
+    <h3>📋 Dataset Overview</h3>
+    <div class="metrics-grid">
+        <div class="metric-box">
+            <div class="metric-value">{{ data_info.total_records }}</div>
+            <div class="metric-label">Total Records</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-value">{{ data_info.total_features }}</div>
+            <div class="metric-label">Total Features</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-value">{{ data_info.missing_values }}</div>
+            <div class="metric-label">Missing Values</div>
+        </div>
+    </div>
+    
+    <h3>🔧 Machine Type Distribution</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Machine Type</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for machine, count in data_info.machine_types.items() %}
+            <tr>
+                <td>{{ machine }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h3>🛠️ Maintenance Flag Distribution</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flag, count in data_info.maintenance_required.items() %}
+            <tr>
+                <td>{{ 'Maintenance Required' if flag == 1 else 'No Maintenance' }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h3>📈 Production Status Distribution</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for status, count in data_info.production_status.items() %}
+            <tr>
+                <td>{{ 'Efficient' if status == 1 else 'Inefficient' }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <div class="card-header">📈 Data Visualizations</div>
+    
+    {% for plot in plots %}
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ plot }}" alt="Data Visualization">
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Performance Comparison - IoT Production System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">📉 Model Performance Comparison</div>
+    <p>Compare all machine learning models across different targets</p>
+</div>
+
+<div class="card">
+    <div class="card-header">📊 Visual Comparison</div>
+    
+    <h3>Classification Models - Accuracy Comparison</h3>
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ plots.classification_accuracy }}" alt="Classification Accuracy Comparison">
+    </div>
+    
+    <h3>Regression Models - R² Score Comparison</h3>
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ plots.regression_r2 }}" alt="Regression R2 Comparison">
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">🔧 Maintenance Flag - Detailed Comparison</div>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model_name, result in maintenance_results.items() %}
+                <tr>
+                    <td><strong>{{ model_name }}</strong></td>
+                    <td>{{ "%.4f"|format(result.accuracy) }}</td>
+                    <td>{{ "%.4f"|format(result.precision) }}</td>
+                    <td>{{ "%.4f"|format(result.recall) }}</td>
+                    <td>{{ "%.4f"|format(result.f1) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">📈 Production Status - Detailed Comparison</div>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model_name, result in production_results.items() %}
+                <tr>
+                    <td><strong>{{ model_name }}</strong></td>
+                    <td>{{ "%.4f"|format(result.accuracy) }}</td>
+                    <td>{{ "%.4f"|format(result.precision) }}</td>
+                    <td>{{ "%.4f"|format(result.recall) }}</td>
+                    <td>{{ "%.4f"|format(result.f1) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">⏱️ Downtime - Detailed Comparison</div>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>MAE</th>
+                    <th>MSE</th>
+                    <th>RMSE</th>
+                    <th>R² Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model_name, result in downtime_results.items() %}
+                <tr>
+                    <td><strong>{{ model_name }}</strong></td>
+                    <td>{{ "%.4f"|format(result.mae) }}</td>
+                    <td>{{ "%.4f"|format(result.mse) }}</td>
+                    <td>{{ "%.4f"|format(result.rmse) }}</td>
+                    <td>{{ "%.4f"|format(result.r2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">⚡ Efficiency Score - Detailed Comparison</div>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>MAE</th>
+                    <th>MSE</th>
+                    <th>RMSE</th>
+                    <th>R² Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model_name, result in efficiency_results.items() %}
+                <tr>
+                    <td><strong>{{ model_name }}</strong></td>
+                    <td>{{ "%.4f"|format(result.mae) }}</td>
+                    <td>{{ "%.4f"|format(result.mse) }}</td>
+                    <td>{{ "%.4f"|format(result.rmse) }}</td>
+                    <td>{{ "%.4f"|format(result.r2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

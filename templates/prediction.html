@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction - IoT Production System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">🔮 Production System Predictions</div>
+    <p>Make single or batch predictions using trained machine learning models</p>
+</div>
+
+<div class="card">
+    <div class="card-header">⚙️ Prediction Configuration</div>
+    
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="model_name">🤖 Select Model</label>
+            <select id="model_name" name="model_name" class="form-control" required>
+                <option value="">Choose a model...</option>
+                <option value="PAC">Passive Aggressive Classifier/Regressor (PAC)</option>
+                <option value="XGBoost">XGBoost</option>
+                <option value="AdaBoost">AdaBoost</option>
+                <option value="NAS-GRF">NAS-based Greedy Rule Forest</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="prediction_type">📊 Prediction Type</label>
+            <select id="prediction_type" name="prediction_type" class="form-control" required onchange="togglePredictionType()">
+                <option value="">Choose prediction type...</option>
+                <option value="single">Single Input Prediction</option>
+                <option value="batch">Batch Prediction (CSV Upload)</option>
+            </select>
+        </div>
+        
+        <div id="single-input" style="display: none;">
+            <h3>📝 Enter Machine Parameters</h3>
+            <div class="form-group">
+                <label for="temperature">🌡️ Temperature (°C)</label>
+                <input type="number" step="0.01" id="temperature" name="temperature" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="vibration_level">📳 Vibration Level</label>
+                <input type="number" step="0.01" id="vibration_level" name="vibration_level" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="power_consumption">⚡ Power Consumption</label>
+                <input type="number" step="0.01" id="power_consumption" name="power_consumption" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="pressure">💨 Pressure</label>
+                <input type="number" step="0.01" id="pressure" name="pressure" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="material_flow_rate">🌊 Material Flow Rate</label>
+                <input type="number" step="0.01" id="material_flow_rate" name="material_flow_rate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="cycle_time">⏰ Cycle Time</label>
+                <input type="number" step="0.01" id="cycle_time" name="cycle_time" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="error_rate">❌ Error Rate</label>
+                <input type="number" step="0.01" id="error_rate" name="error_rate" class="form-control">
+            </div>
+        </div>
+        
+        <div id="batch-input" style="display: none;">
+            <h3>📁 Upload CSV File</h3>
+            <p>CSV file should contain columns: temperature, vibration_level, power_consumption, pressure, material_flow_rate, cycle_time, error_rate</p>
+            <div class="form-group">
+                <label for="batch_file">Choose CSV File</label>
+                <input type="file" id="batch_file" name="batch_file" class="form-control" accept=".csv">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-success" style="width: 100%; font-size: 18px;">Make Prediction</button>
+    </form>
+</div>
+
+{% if predictions %}
+<div class="card">
+    <div class="card-header">✅ Prediction Results</div>
+    
+    {% if predictions.type == 'single' %}
+    <h3>Single Prediction Results</h3>
+    <div class="metrics-grid">
+        <div class="metric-box">
+            <div class="icon">🔧</div>
+            <div class="metric-label">Maintenance Flag</div>
+            <div class="metric-value" style="font-size: 20px;">{{ predictions.maintenance_flag }}</div>
+        </div>
+        <div class="metric-box">
+            <div class="icon">📈</div>
+            <div class="metric-label">Production Status</div>
+            <div class="metric-value" style="font-size: 20px;">{{ predictions.production_status }}</div>
+        </div>
+        <div class="metric-box">
+            <div class="icon">⏱️</div>
+            <div class="metric-label">Downtime (minutes)</div>
+            <div class="metric-value" style="font-size: 20px;">{{ "%.2f"|format(predictions.downtime) }}</div>
+        </div>
+        <div class="metric-box">
+            <div class="icon">⚡</div>
+            <div class="metric-label">Efficiency Score</div>
+            <div class="metric-value" style="font-size: 20px;">{{ "%.2f"|format(predictions.efficiency_score) }}</div>
+        </div>
+    </div>
+    {% elif predictions.type == 'batch' %}
+    <h3>Batch Prediction Results ({{ predictions.count }} records)</h3>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Maintenance Flag</th>
+                    <th>Production Status</th>
+                    <th>Downtime (min)</th>
+                    <th>Efficiency Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(predictions.count) %}
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ predictions.maintenance_flag[i] }}</td>
+                    <td>{{ predictions.production_status[i] }}</td>
+                    <td>{{ "%.2f"|format(predictions.downtime[i]) }}</td>
+                    <td>{{ "%.2f"|format(predictions.efficiency_score[i]) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<script>
+function togglePredictionType() {
+    var type = document.getElementById('prediction_type').value;
+    var singleInput = document.getElementById('single-input');
+    var batchInput = document.getElementById('batch-input');
+    
+    if (type === 'single') {
+        singleInput.style.display = 'block';
+        batchInput.style.display = 'none';
+        // Make single input fields required
+        document.getElementById('temperature').required = true;
+        document.getElementById('vibration_level').required = true;
+        document.getElementById('power_consumption').required = true;
+        document.getElementById('pressure').required = true;
+        document.getElementById('material_flow_rate').required = true;
+        document.getElementById('cycle_time').required = true;
+        document.getElementById('error_rate').required = true;
+        document.getElementById('batch_file').required = false;
+    } else if (type === 'batch') {
+        singleInput.style.display = 'none';
+        batchInput.style.display = 'block';
+        // Make batch input required
+        document.getElementById('batch_file').required = true;
+        // Remove required from single inputs
+        document.getElementById('temperature').required = false;
+        document.getElementById('vibration_level').required = false;
+        document.getElementById('power_consumption').required = false;
+        document.getElementById('pressure').required = false;
+        document.getElementById('material_flow_rate').required = false;
+        document.getElementById('cycle_time').required = false;
+        document.getElementById('error_rate').required = false;
+    } else {
+        singleInput.style.display = 'none';
+        batchInput.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

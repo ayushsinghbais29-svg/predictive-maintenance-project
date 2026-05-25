@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Home - IoT Production System{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>⚙️ Hybrid Classification and Regression Models for Predictive maintenance</h1>
+    <p>Advanced Machine Learning for Predictive Maintenance & Efficiency Optimization</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        👋 Welcome, {{ user.name }}!
+    </div>
+    <p><strong>Role:</strong> {% if user.role == 'ev_engineer' %}Engineer{% else %}User{% endif %}</p>
+    <p>This system uses advanced machine learning algorithms to analyze production system performance and predict maintenance requirements.</p>
+</div>
+
+{% if user.role == 'ev_engineer' %}
+<div class="metrics-grid">
+    <div class="card">
+        <div style="text-align: center;">
+            <div class="icon">📊</div>
+            <h3>Exploratory Data Analysis</h3>
+            <p>View comprehensive data insights and visualizations</p>
+            <a href="{{ url_for('eda') }}" class="btn btn-primary">View EDA</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div style="text-align: center;">
+            <div class="icon">🔧</div>
+            <h3>Maintenance Flag</h3>
+            <p>Classification analysis for maintenance prediction</p>
+            <a href="{{ url_for('maintenance_flag') }}" class="btn btn-primary">View Analysis</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div style="text-align: center;">
+            <div class="icon">📈</div>
+            <h3>Production Status</h3>
+            <p>Classification analysis for production efficiency</p>
+            <a href="{{ url_for('production_status') }}" class="btn btn-primary">View Analysis</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div style="text-align: center;">
+            <div class="icon">⏱️</div>
+            <h3>Downtime Analysis</h3>
+            <p>Regression analysis for downtime prediction</p>
+            <a href="{{ url_for('downtime') }}" class="btn btn-primary">View Analysis</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div style="text-align: center;">
+            <div class="icon">⚡</div>
+            <h3>Efficiency Score</h3>
+            <p>Regression analysis for efficiency prediction</p>
+            <a href="{{ url_for('efficiency_score') }}" class="btn btn-primary">View Analysis</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div style="text-align: center;">
+            <div class="icon">📉</div>
+            <h3>Performance Comparison</h3>
+            <p>Compare all models side-by-side</p>
+            <a href="{{ url_for('performance_comparison') }}" class="btn btn-primary">View Comparison</a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div style="text-align: center;">
+        <div class="icon">🔮</div>
+        <h2>Make Predictions</h2>
+        <p>Use trained models to predict maintenance requirements, production status, downtime, and efficiency scores</p>
+        <a href="{{ url_for('prediction') }}" class="btn btn-success" style="font-size: 18px; padding: 15px 30px;">Go to Prediction Page</a>
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">📋 System Features</div>
+    <ul style="line-height: 2;">
+        <li><strong>4 Classification Models:</strong> PAC, XGBoost, AdaBoost, NAS-based Greedy Rule Forest</li>
+        <li><strong>4 Regression Models:</strong> PAC, XGBoost, AdaBoost, NAS-based Greedy Rule Forest</li>
+        <li><strong>Classification Targets:</strong> Maintenance Flag, Production Status</li>
+        <li><strong>Regression Targets:</strong> Downtime, Efficiency Score</li>
+        <li><strong>Model Persistence:</strong> Trained models saved for fast predictions</li>
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IoT Production System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    {% if current_user.is_authenticated %}
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('home') }}" class="navbar-brand">⚙️ IoT Production System</a>
+            <ul class="navbar-nav">
+                <li><a href="{{ url_for('home') }}">🏠 Home</a></li>
+                {% if current_user.role == 'ev_engineer' %}
+                <li><a href="{{ url_for('eda') }}">📊 EDA</a></li>
+                <li><a href="{{ url_for('maintenance_flag') }}">🔧 Maintenance</a></li>
+                <li><a href="{{ url_for('production_status') }}">📈 Production</a></li>
+                <li><a href="{{ url_for('downtime') }}">⏱️ Downtime</a></li>
+                <li><a href="{{ url_for('efficiency_score') }}">⚡ Efficiency</a></li>
+                <li><a href="{{ url_for('performance_comparison') }}">📉 Compare</a></li>
+                {% else %}
+                <li><a href="{{ url_for('prediction') }}">🔮 Prediction</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">🚪 Logout ({{ current_user.name }})</a></li>
+            </ul>
+        </div>
+    </nav>
+    {% endif %}
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

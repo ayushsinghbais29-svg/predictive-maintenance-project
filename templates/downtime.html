@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Downtime Analysis - IoT Production System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">⏱️ Downtime Regression Analysis</div>
+    <p><strong>Target:</strong> Predict machine inactivity time (minutes)</p>
+</div>
+
+{% for model_name, data in model_data.items() %}
+<div class="card">
+    <div class="card-header">{{ model_name }} Model Results</div>
+    
+    <h3>📊 Regression Metrics</h3>
+    <div class="metrics-grid">
+        <div class="metric-box">
+            <div class="metric-value">{{ "%.4f"|format(data.metrics.mae) }}</div>
+            <div class="metric-label">MAE</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-value">{{ "%.4f"|format(data.metrics.mse) }}</div>
+            <div class="metric-label">MSE</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-value">{{ "%.4f"|format(data.metrics.rmse) }}</div>
+            <div class="metric-label">RMSE</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-value">{{ "%.4f"|format(data.metrics.r2) }}</div>
+            <div class="metric-label">R² Score</div>
+        </div>
+    </div>
+    
+    <h3>📈 Actual vs Predicted Scatter Plot</h3>
+    <div class="plot-container">
+        <img src="data:image/png;base64,{{ data.plots.scatter }}" alt="Scatter Plot">
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
